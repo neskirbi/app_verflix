@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Sugerencias">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/mail"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/round_borders"
+                android:ems="10"
+                android:hint="Nombre"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/msn"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:background="@drawable/round_borders"
+                android:ems="10"
+                android:gravity="center_horizontal|center_vertical"
+                android:hint="Mensaje"
+                android:inputType="textPersonName"
+                android:lineSpacingMultiplier="@android:integer/config_mediumAnimTime"
+                android:paddingTop="10px" />
+
+            <Button
+                android:id="@+id/enviar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/botones_verde"
+                android:paddingTop="10px"
+                android:text="Enviar" />
+        </LinearLayout>
+    </FrameLayout>
+</android.support.constraint.ConstraintLayout>
