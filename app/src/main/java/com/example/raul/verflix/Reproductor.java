@@ -32,7 +32,7 @@ import com.google.android.gms.ads.AdView;
 import java.util.regex.Matcher;
 public class Reproductor extends AppCompatActivity {
     WebView webview;
-    String HTML="",THTML="";
+    String HTML="",THTML="",opt="";
     AdView mAdView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +47,7 @@ public class Reproductor extends AppCompatActivity {
         mAdView.loadAd(adRequest);
 
         Intent intent=getIntent();
+        opt=intent.getStringExtra("opcion");
         THTML=intent.getStringExtra("video");
 
 
@@ -118,9 +119,17 @@ public class Reproductor extends AppCompatActivity {
 
 
 
-        //webview.loadDataWithBaseURL("", HTML, "text/html", "UTF-8", "");
-        webview.loadUrl(THTML);
-        Conectar(THTML);
+        if (opt.contains("2")){
+            webview.loadUrl(THTML);
+            Conectar(THTML);
+            Log.i("web_load",opt+" --2");
+
+        }else{
+            webview.loadDataWithBaseURL("", THTML, "text/html", "UTF-8", "");
+            Log.i("web_load",opt+" --1" );
+        }
+
+
 
 
 

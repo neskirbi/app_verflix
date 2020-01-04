@@ -35,7 +35,7 @@ public class AnuncioVerPelicula extends AppCompatActivity  {
     private AdView mAdView;
     private RewardedVideoAd mRewardedVideoAd;
     int reward=0;
-    String URL="";
+    String URL="",opt="1";
     Funciones funciones=new Funciones();
     GifImageView gifImageView;
     @Override
@@ -95,6 +95,7 @@ public class AnuncioVerPelicula extends AppCompatActivity  {
                     //Toast.makeText(AnuncioVerPelicula.this, ""+frame, Toast.LENGTH_SHORT).show();
                     Intent intent2 = new Intent(getApplicationContext(), Reproductor.class);
                     intent2.putExtra("video", frame);
+                    intent2.putExtra("opcion", opt);
                     //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent2);
                 }else if(frame==""){
@@ -152,13 +153,14 @@ public class AnuncioVerPelicula extends AppCompatActivity  {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 if(url.contains("/ver/")){
+                    opt="2";
                     String ancho=""+webview.getWidth();
 
                     webview.loadUrl("javascript:(function() { " +
 
                             "try{" +
                             "var ancho=$(\"body\").width();" +
-                            "var tplayer=$(\"#frame-player\");" +
+                            "var tplayer=$(\"iframe\");" +
                             /*"tplayer.css({\"width\": \"100%\",\"height\":ancho+\"px\"});" +
                             "var player=tplayer[0].outerHTML;" +
 */                          "alert(tplayer.attr('src'));" +
