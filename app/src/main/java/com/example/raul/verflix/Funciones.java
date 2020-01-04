@@ -15,6 +15,8 @@ import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -22,6 +24,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.regex.Matcher;
@@ -35,6 +41,76 @@ public class Funciones {
     String respuesta="{\"status\":\"2\",\"desc\":\"Error de Conexion\"}";
 
 Context context;
+
+    public String Conexion(String data, String url) {
+
+        String result = "";
+
+
+        try {
+
+            //v.vibrate(50);
+
+            Log.i("Conexion", "Enviando: "+url+"    "+data);
+
+            //Create a URL object holding our url
+            URL myUrl = new URL(url);
+            //Create a connection
+            HttpURLConnection connection = (HttpURLConnection) myUrl.openConnection();
+            //Set methods and timeouts
+            connection.setRequestMethod("POST");
+            connection.setReadTimeout(1500);
+            connection.setConnectTimeout(1500);
+            //connection.addRequestProperty("pr","33");
+
+            //Connect to our url
+            connection.connect();
+
+
+            OutputStream os = connection.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(
+                    new OutputStreamWriter(os, "UTF-8"));
+            //Log.i("datos",getPostDataString(postDataParams));
+            writer.write("data="+data);
+
+            writer.flush();
+            writer.close();
+            os.close();
+
+
+            //Create a new InputStreamReader
+
+            InputStreamReader streamReader = new
+                    InputStreamReader(connection.getInputStream());
+
+            //Create a new buffered reader and String Builder
+            BufferedReader reader = new BufferedReader(streamReader);
+            StringBuilder stringBuilder = new StringBuilder();
+
+            //stringBuilder.append(data);
+
+            //Check if the line we are reading is not null
+            String inputLine;
+            while ((inputLine = reader.readLine()) != null) {
+                stringBuilder.append(inputLine);
+            }
+            //Close our InputStream and Buffered reader
+            reader.close();
+            streamReader.close();
+            //Set our result equal to our stringBuilder
+            result = stringBuilder.toString();
+            Log.i("Conexion","Recibiendo: "+result);
+            return result;
+
+
+        } catch (Exception ee) {
+            Log.i("Conexion", "Error_conexion: "+ ee.getMessage());
+            return  "";
+        }
+
+
+
+    }
     void Conectar(String url,Context con, final int opc){
         context=con;
         Log.i("Log_Visitas",url);
@@ -51,49 +127,18 @@ Context context;
                                 Log.i("Log_Visitas",response);
                                 respuesta=""+response;
 
-                                switch (opc){
-                                    case 1:
 
-                                        try {
-                                            Log.i("Log_Visitas", ""+ "R: "+respuesta);
-                                            JSONObject object=new JSONObject(respuesta);
-                                            Log.i("Log_Visitas", "Obj-version: "+ object.getString("version"));
-                                            Log.i("Log_Visitas", "Obj-nombre: "+ object.getString("nombre"));
-
-                                            Log.i("Log_Visitas", "Obj-version-apk: "+ parseInt( context.getResources().getString(R.string.app_version )) );
-
-                                            if ( parseInt(object.getString("version"))>parseInt( context.getResources().getString(R.string.app_version )) ){
-                                                Intent intent=new Intent(context,Update.class);
-                                                intent.putExtra("URL",object.getString("url"));
-                                                intent.putExtra("nombre",object.getString("nombre"));
-                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                context.startActivity(intent);
-
-                                            }else {
-                                                Iniciar();
-                                            }
-                                        } catch (Exception e) {
-                                            Log.i("Log_Visitas",e.getMessage());
-                                            Iniciar();
-                                        }
-                                        break;
-                                }
                             }catch (Exception ee){
                                 Log.i("Log_Visitas",ee.toString());
 
-                                Iniciar();
+                                //Iniciar();
                             }
 
                         }
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    switch (opc){
-                        case 1:
-                        Log.i("Log_Visitas",error.toString());
-                        Iniciar();
-                        break;
-                    }
+
 
                 }
             });
@@ -105,7 +150,8 @@ Context context;
         }
     }
 
-    void Iniciar(){
+    void Iniciar(Context cont){
+        context=cont;
 
                 Intent mainIntent = new Intent(context, Home.class);
                 mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

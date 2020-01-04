@@ -95,14 +95,13 @@ public class Update extends AppCompatActivity {
 
     Boolean verifyPermission() {
         int permsRequestCode = 100;
-        String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.READ_PHONE_STATE};
-        int accessFinePermission = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
-        int accessCoarseLocation = checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
+        String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.READ_PHONE_STATE};
+
         int writeExternalStorage = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         int readExternalStorage = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
         int readPhoneState = checkSelfPermission(Manifest.permission.READ_PHONE_STATE);
 
-        if (readPhoneState == PackageManager.PERMISSION_GRANTED && accessFinePermission == PackageManager.PERMISSION_GRANTED && accessCoarseLocation == PackageManager.PERMISSION_GRANTED && readExternalStorage == PackageManager.PERMISSION_GRANTED&& writeExternalStorage == PackageManager.PERMISSION_GRANTED) {
+        if (readPhoneState == PackageManager.PERMISSION_GRANTED && readExternalStorage == PackageManager.PERMISSION_GRANTED&& writeExternalStorage == PackageManager.PERMISSION_GRANTED) {
             return true;
         } else {
             requestPermissions(perms, permsRequestCode);
